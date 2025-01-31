@@ -246,6 +246,29 @@ public class ImageUtil {
     }
   }
 
+  public static BufferedImage makeDilatedImage(BufferedImage image) {
+    OpenCV.loadShared();
+
+    //Dilate the font twice using a 2,2 'cross' kernel
+    try {
+      Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(2, 2));
+
+      Mat original = toMat(image);
+
+      Mat dilatedImage = new Mat();
+      Imgproc.dilate(original, dilatedImage, kernel);
+    
+      Mat dilatedImage2 = new Mat();
+      Imgproc.dilate(dilatedImage, dilatedImage2, kernel);
+    
+      return toBufferedImage(dilatedImage2);
+    } catch (IOException e) {
+      throw new ImageProcessingException(e);
+    }
+  }
+
+
+
   public static List<Rectangle> findBoundingBoxes(BufferedImage image) {
     OpenCV.loadShared();
 
