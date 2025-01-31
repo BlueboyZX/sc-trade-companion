@@ -230,6 +230,22 @@ public class ImageUtil {
     }
   }
 
+  public static BufferedImage applyThreshBinarization(BufferedImage image, int threshold) {
+    OpenCV.loadShared();
+
+    try {
+      Mat original = toMat(image);
+      Mat filtered = new Mat(original.rows(), original.cols(), original.type());
+      Mat processed = new Mat(original.rows(), original.cols(), original.type());
+
+      Imgproc.threshold(filtered, processed, threshold, 255, Imgproc.THRESH_BINARY);
+
+      return toBufferedImage(processed);
+    } catch (IOException e) {
+      throw new ImageProcessingException(e);
+    }
+  }
+
   public static List<Rectangle> findBoundingBoxes(BufferedImage image) {
     OpenCV.loadShared();
 
